@@ -12,13 +12,8 @@ Usage:
 
 Examples:
 
-1. List definitions from a specific file:
+List definitions from a specific file:
 <list_code_definition_names>
 <path>src/main.ts</path>
-</list_code_definition_names>
-
-2. List definitions from all files in a directory:
-<list_code_definition_names>
-<path>src/</path>
 </list_code_definition_names>`
 }

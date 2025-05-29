@@ -21,14 +21,7 @@ Notes:
 
 Examples:
 
-1. Simple text replacement:
-<search_and_replace>
-<path>example.ts</path>
-<search>oldText</search>
-<replace>newText</replace>
-</search_and_replace>
-
-2. Case-insensitive regex pattern:
+1. Case-insensitive regex pattern:
 <search_and_replace>
 <path>example.ts</path>
 <search>old\w+</search>

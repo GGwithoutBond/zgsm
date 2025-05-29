@@ -1,7 +1,6 @@
 import fs from "fs/promises"
 import path from "path"
 
-import { LANGUAGES, isLanguage } from "../../../shared/language"
 import { Dirent } from "fs"
 
 /**
@@ -216,14 +215,6 @@ export async function addCustomInstructions(
 				}
 			}
 		}
-	}
-
-	// Add language preference if provided
-	if (options.language) {
-		const languageName = isLanguage(options.language) ? LANGUAGES[options.language] : options.language
-		sections.push(
-			`Language Preference:\nYou should always speak and think in the "${languageName}" (${options.language}) language unless the user gives you instructions below to do otherwise.`,
-		)
 	}
 
 	// Add global instructions first

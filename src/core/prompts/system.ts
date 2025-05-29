@@ -16,7 +16,6 @@ import * as vscode from "vscode"
 import * as os from "os"
 import {
 	getRulesSection,
-	getSystemInfoSection,
 	getObjectiveSection,
 	getSharedToolUseSection,
 	getMcpServersSection,
@@ -89,9 +88,7 @@ ${getCapabilitiesSection(cwd, supportsComputerUse, mcpHub, effectiveDiffStrategy
 
 ${modesSection}
 
-${getRulesSection(cwd, supportsComputerUse, effectiveDiffStrategy)}
-
-${getSystemInfoSection(cwd)}
+${getRulesSection(cwd, supportsComputerUse, effectiveDiffStrategy)}}
 
 ${getObjectiveSection()}
 

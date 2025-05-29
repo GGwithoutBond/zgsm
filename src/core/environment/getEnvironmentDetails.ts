@@ -8,7 +8,6 @@ import delay from "delay"
 import { EXPERIMENT_IDS, experiments as Experiments, ExperimentId } from "../../shared/experiments"
 import { formatLanguage } from "../../shared/language"
 import { defaultModeSlug, getFullModeDetails, getModeBySlug, isToolAllowedForMode } from "../../shared/modes"
-import { getApiMetrics } from "../../shared/getApiMetrics"
 import { listFiles } from "../../services/glob/list-files"
 import { TerminalRegistry } from "../../integrations/terminal/TerminalRegistry"
 import { Terminal } from "../../integrations/terminal/Terminal"
@@ -17,6 +16,8 @@ import { formatResponse } from "../prompts/responses"
 
 import { Task } from "../task/Task"
 import { defaultLang } from "../../utils/language"
+
+import { getSystemInfoSection } from "../prompts/sections"
 
 export async function getEnvironmentDetails(cline: Task, includeFileDetails: boolean = false) {
 	let details = ""
@@ -189,16 +190,7 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 	const timeZoneOffsetStr = `${timeZoneOffset >= 0 ? "+" : "-"}${timeZoneOffsetHours}:${timeZoneOffsetMinutes.toString().padStart(2, "0")}`
 	details += `\n\n# Current Time\n${formatter.format(now)} (${timeZone}, UTC${timeZoneOffsetStr})`
 
-	// Add context tokens information.
-	const { contextTokens, totalCost } = getApiMetrics(cline.clineMessages)
-	const { id: modelId, info: modelInfo } = cline.api.getModel()
-	const contextWindow = modelInfo.contextWindow
-
-	const contextPercentage =
-		contextTokens && contextWindow ? Math.round((contextTokens / contextWindow) * 100) : undefined
-
-	details += `\n\n# Current Context Size (Tokens)\n${contextTokens ? `${contextTokens.toLocaleString()} (${contextPercentage}%)` : "(Not available)"}`
-	details += `\n\n# Current Cost\n${totalCost !== null ? `$${totalCost.toFixed(2)}` : "(Not available)"}`
+	const { id: modelId, } = cline.api.getModel()
 
 	// Add current mode and any mode-specific warnings.
 	const {
@@ -222,6 +214,7 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 	details += `<slug>${currentMode}</slug>\n`
 	details += `<name>${modeDetails.name}</name>\n`
 	details += `<model>${modelId}</model>\n`
+	details += `${getSystemInfoSection(cline.cwd)}`
 
 	if (Experiments.isEnabled(experiments ?? {}, EXPERIMENT_IDS.POWER_STEERING)) {
 		details += `<role>${modeDetails.roleDefinition}</role>\n`
@@ -242,7 +235,7 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 	}
 
 	if (includeFileDetails) {
-		details += `\n\n# Current Workspace Directory (${cline.cwd.toPosix()}) Files\n`
+		details += `\n\n#Files\n`
 		const isDesktop = arePathsEqual(cline.cwd, path.join(os.homedir(), "Desktop"))
 
 		if (isDesktop) {
@@ -264,6 +257,7 @@ export async function getEnvironmentDetails(cline: Task, includeFileDetails: boo
 
 			details += result
 		}
+		details +="The Current Workspace Directory is the active VS Code project directory, and is therefore the default directory for all tool operations. New terminals will be created in the current workspace directory, however if you change directories in a terminal it will then have a different working directory; changing directories in a terminal does not modify the workspace directory, because you do not have access to change the workspace directory. When the user initially gives you a task, a recursive list of all filepaths in the current workspace directory ('/test/path') will be included in environment_details. This provides an overview of the project's file structure, offering key insights into the project from directory/file names (how developers conceptualize and organize their code) and file extensions (the language used). This can also guide decision-making on which files to explore further. If you need to further explore directories such as outside the current workspace directory, you can use the list_files tool. If you pass 'true' for the recursive parameter, it will list files recursively. Otherwise, it will list files at the top level, which is better suited for generic directories where you don't necessarily need the nested structure, like the Desktop."
 	}
 
 	return `<environment_details>\n${details.trim()}\n</environment_details>`

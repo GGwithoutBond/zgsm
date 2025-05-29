@@ -16,25 +16,13 @@ Usage:
 
 Examples:
 
-1. Reading an entire file:
-<read_file>
-<path>frontend-config.json</path>
-</read_file>
-
-2. Reading the first 1000 lines of a large log file:
+1. Reading the first 1000 lines of a large log file:
 <read_file>
 <path>logs/application.log</path>
 <end_line>1000</end_line>
 </read_file>
 
-3. Reading lines 500-1000 of a CSV file:
-<read_file>
-<path>data/large-dataset.csv</path>
-<start_line>500</start_line>
-<end_line>1000</end_line>
-</read_file>
-
-4. Reading a specific function in a source file:
+2. Reading a specific function in a source file:
 <read_file>
 <path>src/app.ts</path>
 <start_line>46</start_line>

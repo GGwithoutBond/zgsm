@@ -45,12 +45,6 @@ Usage:
 <text>Text to type (optional)</text>
 </browser_action>
 
-Example: Requesting to launch a browser at https://example.com
-<browser_action>
-<action>launch</action>
-<url>https://example.com</url>
-</browser_action>
-
 Example: Requesting to click on the element at coordinates 450,300
 <browser_action>
 <action>click</action>

@@ -12,11 +12,6 @@ Usage:
 <cwd>Working directory path (optional)</cwd>
 </execute_command>
 
-Example: Requesting to execute npm run dev
-<execute_command>
-<command>npm run dev</command>
-</execute_command>
-
 Example: Requesting to execute ls in a specific directory if directed
 <execute_command>
 <command>ls -la</command>
